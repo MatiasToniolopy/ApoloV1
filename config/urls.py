@@ -1,0 +1,26 @@
+from django.conf.urls.static import static
+from django.contrib import admin
+from django.urls import path, include
+
+from config import settings
+from core.homepage.views import IndexView
+from django.conf.urls import handler404
+from core.pos.views.dashboard.views import page_not_found404
+from rest_framework.authtoken import views
+
+urlpatterns = [
+    path('', IndexView.as_view(), name='index'),
+    path('admin/', admin.site.urls),
+    path('login/', include('core.login.urls')),
+    path('pos/', include('core.pos.urls')),
+    path('reports/', include('core.reports.urls')),
+    path('user/', include('core.user.urls')),
+    path('api/', include('core.api.urls')),
+    path('api-token-auth/', views.obtain_auth_token)
+]
+
+# handler404 = page_not_found404
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
